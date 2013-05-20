@@ -25,6 +25,10 @@
   "readmeFilename": "README.md",
   "gitHead": "f43af291b04623cb1db92d9124758c0b96fbd39e",
   "dependencies": {
-    "express": "~3.2.4"
+    "mongoose": "~3.6.11",
+    "express-resource": "~1.0.0",
+    "faye": "~0.8.9",
+    "baucis": "~0.4.3",
+    "express": "~3.1.2"
   }
 }
