@@ -6,6 +6,6 @@
     "underscore": "~1.4.4",
     "jquery": "~1.9.1",
     "todomvc-common": "~0.1.4",
-    "backbone.localStorage": "~1.1.0"
+    "faye": "http://faye.jcoglan.com/assets/faye.0-8-9.zip"
   }
 }

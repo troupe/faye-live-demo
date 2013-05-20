@@ -34,6 +34,7 @@ var app = app || {};
 			this.$main = this.$('#main');
 
 			this.listenTo(app.Todos, 'add', this.addOne);
+			this.listenTo(app.Todos, 'remove', this.remove);
 			this.listenTo(app.Todos, 'reset', this.addAll);
 			this.listenTo(app.Todos, 'change:completed', this.filterOne);
 			this.listenTo(app.Todos, 'filter', this.filterAll);
@@ -73,7 +74,9 @@ var app = app || {};
 		// appending its element to the `<ul>`.
 		addOne: function (todo) {
 			var view = new app.TodoView({ model: todo });
-			$('#todo-list').append(view.render().el);
+			var el = view.render().el;
+			$(el).data('todoId', todo.id);
+			$('#todo-list').prepend(el);
 		},
 
 		// Add all items in the **Todos** collection at once.
@@ -114,6 +117,18 @@ var app = app || {};
 		clearCompleted: function () {
 			_.invoke(app.Todos.completed(), 'destroy');
 			return false;
+		},
+
+		// Clear all completed todo items, destroying their models.
+		remove: function (model) {
+			$('#todo-list').children('li').each(function() {
+				if($(this).data('todoId') === model.id) {
+					$(this).remove();
+					return false;
+				}
+			});
+
+
 		},
 
 		toggleAllComplete: function () {
