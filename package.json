@@ -1,0 +1,30 @@
+{
+  "name": "faye-live-demo",
+  "version": "1.0.0",
+  "description": "Faye Backbone Collections Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Troupe/faye-live-demo"
+  },
+  "keywords": [
+    "backbonejs",
+    "js",
+    "javascript",
+    "backbone",
+    "faye",
+    "live",
+    "collections",
+    "demo"
+  ],
+  "author": "Andrew Newdigate",
+  "license": "Free",
+  "readmeFilename": "README.md",
+  "gitHead": "f43af291b04623cb1db92d9124758c0b96fbd39e",
+  "dependencies": {
+    "express": "~3.2.4"
+  }
+}
