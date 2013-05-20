@@ -1,0 +1,12 @@
+{
+  "name": "todomvc-common",
+  "version": "0.1.6",
+  "gitHead": "ede4a1b3473d8303cefd34f162e705b7c132cc50",
+  "_id": "todomvc-common@0.1.6",
+  "readme": "ERROR: No README.md file found!",
+  "description": "ERROR: No README.md file found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tastejs/todomvc-common.git"
+  }
+}

@@ -119,7 +119,6 @@ var app = app || {};
     },
 
     _removeEvent: function(message) {
-      console.log('DELETING ', message);
       var id = message[this.model.prototype.idAttribute];
       this.remove(id);
     }
