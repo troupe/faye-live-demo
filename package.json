@@ -1,6 +1,6 @@
 {
   "name": "faye-live-demo",
-  "version": "1.0.0",
+  "version": "1.0.0-2",
   "subdomain": "faye-live-demo",
   "description": "Faye Backbone Collections Demo",
   "main": "index.js",
@@ -11,8 +11,8 @@
     "type": "git",
     "url": "https://github.com/Troupe/faye-live-demo"
   },
-  "engines" : {
-    "node" : "v0.8.x"
+  "engines": {
+    "node": "v0.8.x"
   },
   "keywords": [
     "backbonejs",
