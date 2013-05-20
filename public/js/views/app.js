@@ -75,7 +75,8 @@ var app = app || {};
 		addOne: function (todo) {
 			var view = new app.TodoView({ model: todo });
 			var el = view.render().el;
-			$(el).data('todoId', todo.id);
+			$(el).data('view', view);
+
 			$('#todo-list').prepend(el);
 		},
 
@@ -121,14 +122,18 @@ var app = app || {};
 
 		// Clear all completed todo items, destroying their models.
 		remove: function (model) {
-			$('#todo-list').children('li').each(function() {
-				if($(this).data('todoId') === model.id) {
-					$(this).remove();
-					return false;
-				}
-			});
+			var viewItem = $('#todo-list').children('li').filter(function() {
+				var $this = $(this);
 
+				return $this.data('view') && $this.data('view').model.id === model.id;
+			})[0];
 
+			if(!viewItem) {
+				console.log('Unable to find view associated with itemId ', model.id);
+				return;
+			}
+
+			viewItem.remove();
 		},
 
 		toggleAllComplete: function () {

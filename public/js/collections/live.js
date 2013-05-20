@@ -11,7 +11,7 @@ var app = app || {};
     this._awaitCount = models.length;
 
     _.each(models, function(model) {
-      this.listenToOnce(model, 'sync', this._onModelSync);
+      this.listenToOnce(model, 'sync error', this._onModelSync);
     }, this);
   }
 
@@ -22,13 +22,10 @@ var app = app || {};
         this.trigger('found', model);
         this.stopListening();
 
-      } else {
-        this._awaitCount--;
-        if(this._awaitCount === 0) {
-          // All the models are done and we haven't found the id we received from the realtime stream
-          this.stopListening();
-          this.trigger('notfound');
-        }
+      } else if(--this._awaitCount === 0) {
+        // All the models are done and we haven't found the id we received from the realtime stream
+        this.stopListening();
+        this.trigger('notfound');
       }
     }
   });
@@ -36,16 +33,14 @@ var app = app || {};
 
   var LiveCollection = Backbone.Collection.extend({
     constructor: function(models, options) {
-      _.bindAll(this, 'fayeEvent');
       Backbone.Collection.prototype.constructor.call(this, models, options);
 
-      this.subscription = fayeClient.subscribe(this.url, this.fayeEvent);
+      this.subscription = fayeClient.subscribe(this.url, this.fayeEvent, this);
     },
 
     fayeEvent: function(message) {
       var method = message.method;
       var body = message.body;
-
 
       switch(method) {
         case 'POST':
@@ -65,14 +60,15 @@ var app = app || {};
       }
     },
 
-    _createEvent: function(message) {
+    _createEvent: function(body) {
+      console.log('live: Create event', body);
+
       // Does this id exist in the collection already?
       // If so, rather just do an update
-      var id = message[this.model.prototype.idAttribute];
+      var id = this._getModelId(body);
       if(this.get(id)) {
-        return this._updateEvent(message);
+        return this._updateEvent(body);
       }
-
 
       // Look to see if this collection has any outstanding creates...
       var idAttribute = this.model.prototype.idAttribute;
@@ -83,27 +79,28 @@ var app = app || {};
       // If there are unsaved items, monitor them and if one of them turns out to be the matching object
       // then simply update that
       if(unsaved.length) {
+        console.log('live: awaiting syncs of unsaved objects');
+
         var listener = new UpdateEventListener(id, unsaved);
 
-        listener.once('found', function() {
-          console.log('Ignoring this for now');
-        });
-
         listener.once('notfound', function() {
-          console.log('All the syncs have happened and we still havent found this object, so lets add it');
-          this.add(message, { parse: true });
+          this.add(body, { parse: true });
         }, this);
 
       } else {
-        this.add(message, { parse: true });
+        console.log('live: adding immediately');
+
+        this.add(body, { parse: true });
 
       }
     },
 
-    _updateEvent: function(message) {
-      var id = message[this.model.prototype.idAttribute];
+    _updateEvent: function(body) {
+      console.log('live: Update event', body);
 
-      var parsed = new this.model(message, { parse: true });
+      var id = this._getModelId(body);
+
+      var parsed = new this.model(body, { parse: true });
 
       // Try find an existing instance with the given ID
       var existingModel = this.get(id);
@@ -118,9 +115,15 @@ var app = app || {};
 
     },
 
-    _removeEvent: function(message) {
-      var id = message[this.model.prototype.idAttribute];
+    _removeEvent: function(body) {
+      console.log('live: Remove event', body);
+
+      var id = this._getModelId(body);
       this.remove(id);
+    },
+
+    _getModelId: function(model) {
+      return model[this.model.prototype.idAttribute];
     }
 
   });

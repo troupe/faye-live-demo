@@ -35,6 +35,7 @@ var app = app || {};
 
 		// Re-render the titles of the todo item.
 		render: function () {
+			this.$el.data('todoId', this.model.id);
 			this.$el.html(this.template(this.model.toJSON()));
 			this.$el.toggleClass('completed', this.model.get('completed'));
 			this.toggleVisible();
@@ -87,7 +88,9 @@ var app = app || {};
 
 		// Remove the item, destroy the model from *localStorage* and delete its view.
 		clear: function () {
-			this.model.destroy();
+			console.log('todos: clear()');
+			this.model.destroy({ wait: true });
+			this.remove();
 		}
 	});
 })(jQuery);
