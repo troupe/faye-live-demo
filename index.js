@@ -47,8 +47,13 @@ mongooseUtils.attachListenersToSchema(todoSchema, {
 var Todo = mongoose.model('todo', todoSchema);
 
 // Connect to Mongo
-var uri = 'mongodb://localhost/todo';
-mongoose.connect(uri);
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/todo');
+
+
+
+var app = express();
+var server = http.createServer(app);
+app.use(express.static('public'));
 
 baucis.rest({
 	singular: 'todo',
@@ -70,10 +75,6 @@ baucis.rest({
 });
 app.use('/api/', baucis());
 
-var app = express();
-var server = http.createServer(app);
-
-app.use(express.static('public'));
 
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 bayeux.attach(server);
