@@ -18,7 +18,7 @@ var todoSchema = new Schema({
 
 // This method will send realtime notifications to the faye clients
 function notifyClients(method, model, url) {
-	bayeux.getClient().publish(url, {
+	fayeServer.getClient().publish(url, {
 		method: method,
 		body: model.toJSON()
 	});
@@ -75,8 +75,8 @@ baucis.rest({
 app.use('/api/', baucis());
 
 
-var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
-bayeux.attach(server);
+var fayeServer = new faye.NodeAdapter({mount: '/faye', timeout: 45});
+fayeServer.attach(server);
 
 
 server.listen(process.env.NODE_PORT || 3000);
