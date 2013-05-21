@@ -80,4 +80,4 @@ var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 bayeux.attach(server);
 
 
-server.listen(80);
+server.listen(process.env.NODE_PORT || 3000);

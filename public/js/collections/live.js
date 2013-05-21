@@ -35,10 +35,10 @@ var app = app || {};
     constructor: function(models, options) {
       Backbone.Collection.prototype.constructor.call(this, models, options);
 
-      this.subscription = fayeClient.subscribe(this.url, this.fayeEvent, this);
+      this.subscription = fayeClient.subscribe(this.url, this._fayeEvent, this);
     },
 
-    fayeEvent: function(message) {
+    _fayeEvent: function(message) {
       var method = message.method;
       var body = message.body;
 

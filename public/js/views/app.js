@@ -133,7 +133,7 @@ var app = app || {};
 				return;
 			}
 
-			viewItem.remove();
+			$(viewItem).data('view').remove();
 		},
 
 		toggleAllComplete: function () {
