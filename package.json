@@ -1,6 +1,6 @@
 {
   "name": "faye-live-demo",
-  "version": "1.0.0-2",
+  "version": "1.0.0-3",
   "subdomain": "faye-live-demo",
   "description": "Faye Backbone Collections Demo",
   "main": "index.js",
